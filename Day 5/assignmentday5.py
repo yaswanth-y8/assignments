@@ -3,35 +3,34 @@ from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 
 
-def download_page(url):
+def page(url):
     
     response = requests.get(url)
     return response.text
 
 
-def extract_links(html_content):
+def ext_links(html):
     
-    soup = BeautifulSoup(html_content, 'html.parser')
+    soup = BeautifulSoup(html, 'html.parser')
     links = []
-    
-    for link in soup.find_all('a', href=True):
-        href = link['href']
+    for link in soup.find_all('a'):
+        href = link.get('href')
         if href.startswith('http'):  
             links.append(href)
     return links
 
 
-def download_links(links):
+def dld_links(links):
     with ThreadPoolExecutor() as executor:
-        executor.map(download_page, links)
+        executor.map(page, links)
 
 
 def main(url):
 
-    html_content = download_page(url)
-    links = extract_links(html_content)
+    con = page(url)
+    links = ext_links(con)
     print(f"Found {len(links)} links: {links}")
-    download_links(links)
+    dld_links(links)
 
 
 
