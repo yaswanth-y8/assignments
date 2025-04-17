@@ -19,17 +19,12 @@ def ext_links(html):
     return links
 
 
-
-
 async def dld_links(url):
     async with aiohttp.ClientSession() as session:
         
         html = await page(session, url)
         links = ext_links(html)
         print(f"Found {len(links)} links: {links}")
-
-        
-
 
 
 if __name__ == '__main__':
